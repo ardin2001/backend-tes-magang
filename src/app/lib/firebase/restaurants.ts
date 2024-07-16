@@ -10,6 +10,7 @@ import {
   getDoc,
   updateDoc,
   orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 import App from "./config";
 import { getFirestore } from "firebase/firestore";
@@ -17,9 +18,9 @@ import { success, notFound, notImplemented } from "@/app/api/statusCode";
 
 const db = getFirestore(App);
 
-export async function GetProductById(id: any) {
+export async function GetRestaurantById(id: any) {
   try {
-    const docSnap = await getDoc(doc(db, "products", id));
+    const docSnap = await getDoc(doc(db, "restaurants", id));
     if (docSnap.exists()) {
       const data = { id: docSnap.id, ...docSnap.data() };
       return { status: true, statusCode: success, data };
@@ -30,10 +31,10 @@ export async function GetProductById(id: any) {
   }
 }
 
-export async function GetProductBy(inputUser: any) {
+export async function GetRestaurantBy(inputUser: any) {
   try {
     const q = query(
-      collection(db, "products"),
+      collection(db, "restaurants"),
       or(
         where("name", "==", inputUser.name)
         //   where("fullname", "==", inputUser.fullname)
@@ -60,22 +61,23 @@ export async function GetProductBy(inputUser: any) {
   }
 }
 
-export async function PostProduct(dataInput: any) {
+export async function PostRestaurant(dataInput: any) {
   try {
-    await setDoc(doc(collection(db, "products")), dataInput);
+    dataInput.created_at = serverTimestamp();
+    await setDoc(doc(collection(db, "restaurants")), dataInput);
     return { status: true, statusCode: success };
   } catch {
     return { status: false, statusCode: notImplemented };
   }
 }
 
-export async function GetAllProduct( order : any, sort:"asc" | "desc") {
+export async function GetAllRestaurant( order : any, sort:"asc" | "desc") {
   const createQuery = (db:any, order:any, sort:"asc" | "desc") => {
     let q;
     if (order) {
-      q = query(collection(db, "products"), orderBy(order, sort));
+      q = query(collection(db, "restaurants"), orderBy(order, sort),orderBy("created_at", "desc"));
     } else {
-      q = query(collection(db, "products"),);
+      q = query(collection(db, "restaurants"),orderBy("created_at", "desc"));
     }
     return q;
   };
@@ -95,16 +97,16 @@ export async function GetAllProduct( order : any, sort:"asc" | "desc") {
   }
 }
 
-export async function DeleteProduct(id: any) {
+export async function DeleteRestaurant(id: any) {
   try {
-    await deleteDoc(doc(db, "products", id));
+    await deleteDoc(doc(db, "restaurants", id));
     return { status: true, statusCode: success };
   } catch {
     return { status: false, statusCode: notImplemented };
   }
 }
 
-export async function UpdateProduct({
+export async function UpdateRestaurant({
   id,
   dataUpdate,
 }: {
@@ -112,7 +114,7 @@ export async function UpdateProduct({
   dataUpdate: any;
 }) {
   try {
-    await updateDoc(doc(db, "products", id), dataUpdate);
+    await updateDoc(doc(db, "restaurants", id), dataUpdate);
     return { status: true, statusCode: success };
   } catch {
     return { status: false, statusCode: notImplemented };

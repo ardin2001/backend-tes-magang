@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  GetOrderById,
-  UpdateOrder,
-  DeleteOrder,
-} from "@/app/lib/firebase/orders";
+  GetRestaurantById,
+  UpdateRestaurant,
+  DeleteRestaurant,
+} from "@/app/lib/firebase/restaurants";
 import {
   notFound,
   internalServerError,
@@ -15,13 +15,13 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { status, statusCode, data } = await GetOrderById(params.id);
+    const { status, statusCode, data } = await GetRestaurantById(params.id);
     if (status) {
       return NextResponse.json(
         {
           status: true,
           statusCode,
-          message: "Successfully get detail order data",
+          message: "Successfully get detail restaurants data",
           data: data,
         },
         {
@@ -34,7 +34,7 @@ export async function GET(
           {
             status: false,
             statusCode,
-            message: "Failed get detail order data",
+            message: "Failed get detail restaurants data",
             data,
           },
           {
@@ -76,9 +76,9 @@ export async function PUT(
 ) {
   try {
     const dataUpdate = await req.json();
-    const { status, statusCode }: any = await GetOrderById(params.id);
+    const { status, statusCode }: any = await GetRestaurantById(params.id);
     if (status) {
-      const { status, statusCode }: any = await UpdateOrder({
+      const { status, statusCode }: any = await UpdateRestaurant({
         id: params.id,
         dataUpdate,
       });
@@ -88,7 +88,7 @@ export async function PUT(
           {
             status,
             statusCode,
-            message: "Successfully update order data",
+            message: "Successfully update restaurants data",
             data: null,
           },
           {
@@ -100,7 +100,7 @@ export async function PUT(
           {
             status,
             statusCode,
-            message: "Failed update order data",
+            message: "Failed update restaurants data",
             data: null,
           },
           {
@@ -114,7 +114,7 @@ export async function PUT(
           {
             status,
             statusCode,
-            message: "Order not found",
+            message: "Product not found",
             data: null,
           },
           {
@@ -155,15 +155,15 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { status, statusCode } = await GetOrderById(params.id);
+    const { status, statusCode } = await GetRestaurantById(params.id);
     if (status) {
-      const { status, statusCode } = await DeleteOrder(params.id);
+      const { status, statusCode } = await DeleteRestaurant(params.id);
       if (status) {
         return NextResponse.json(
           {
             status,
             statusCode,
-            message: "Successfully delete order data",
+            message: "Successfully delete restaurants data",
             data: null,
           },
           {
@@ -189,7 +189,7 @@ export async function DELETE(
           {
             status,
             statusCode,
-            message: "Order not found",
+            message: "Restaurants not found",
             data: null,
           },
           {
