@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .main {
+        background-color: blueviolet;
+        height: 900px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>test</h1>
+    <div class="main"></div>
+    <p id="count">0</p>
+    <script>
+      //   const countDown = setInterval(() => {
+      //     const count = document.getElementById("count");
+      //     if (Number(count.innerHTML) == 50) {
+      //       clearInterval(countDown);
+      //     }
+      //     count.innerHTML = Number(count.innerHTML) + 1;
+      //   }, 100);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const count = document.getElementById("count");
+        const observer = new IntersectionObserver((entries, innerObserver) => {
+          entries.forEach((entry) => {
+            console.log("foreach");
+            if (entry.isIntersecting) {
+              console.log("masuk if");
+              const countDown = setInterval(() => {
+                if (Number(count.innerHTML) == 50) {
+                  clearInterval(countDown);
+                }
+                count.innerHTML = Number(count.innerHTML) + 1;
+              }, 100);
+            //   observer.unobserve(count);
+              innerObserver.unobserve(count)
+            }
+          });
+        });
+        observer.observe(count);
+      });
+    </script>
+  </body>
+</html>
