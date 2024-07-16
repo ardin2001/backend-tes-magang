@@ -23,6 +23,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(
         {
           status,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
           statusCode,
           message: "Success get all products data",
           data : data.splice((page - 1) * limits, limits),
