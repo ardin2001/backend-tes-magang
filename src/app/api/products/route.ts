@@ -41,6 +41,11 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(
           {
             status,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
             statusCode,
             message: "failed get all products data",
             data,
@@ -53,6 +58,11 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(
           {
             status,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
             statusCode,
             message: "Error Server API",
             data: null,
@@ -67,6 +77,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         status: false,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
         statusCode: internalServerError,
         message: "Internal Server Error",
         data: null,
@@ -86,6 +101,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           status: false,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
           statusCode: conflict,
           message: "Product name available",
           data: null,
