@@ -71,18 +71,21 @@ export async function PostRestaurant(dataInput: any) {
   }
 }
 
-export async function GetAllRestaurant( order : any, sort:"asc" | "desc") {
-  const createQuery = (db:any, order:any, sort:"asc" | "desc") => {
+export async function GetAllRestaurant(category: any) {
+  const createQuery = (db: any, category: any) => {
     let q;
-    if (order) {
-      q = query(collection(db, "restaurants"), orderBy(order, sort),orderBy("created_at", "desc"));
+    if (category) {
+      q = query(
+        collection(db, "restaurants"),
+        where("category", "==", category),
+      );
     } else {
-      q = query(collection(db, "restaurants"),orderBy("created_at", "desc"));
+      q = query(collection(db, "restaurants"), orderBy("created_at", "desc"));
     }
     return q;
   };
   try {
-    const q = createQuery(db, order, sort);
+    const q = createQuery(db, category);
     const querySnapshot = await getDocs(q);
     const response: any = querySnapshot.docs.map((doc) => {
       return {

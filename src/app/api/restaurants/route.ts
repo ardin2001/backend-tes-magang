@@ -13,19 +13,16 @@ import {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const limits:number = Number(searchParams.get("limit")) || 10;
-  const order = searchParams.get("order");
-  const sort:any = searchParams.get("sort") || "asc";
-  const page:number = Number(searchParams.get("page")) || 1;
+  const category:any = searchParams.get("category");
   try {
-    let { status, statusCode, data } = await GetAllRestaurant(order,sort);
+    let { status, statusCode, data } = await GetAllRestaurant(category);
     if (status) {
       return NextResponse.json(
         {
           status,
           statusCode,
           message: "Success get all restaurants data",
-          data : data.splice((page - 1) * limits, limits),
+          data,
         },
         {
           status: statusCode,
