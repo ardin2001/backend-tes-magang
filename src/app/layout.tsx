@@ -14,10 +14,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  detail
 }: Readonly<{
   children: React.ReactNode,
-  detail: React.ReactNode,
 }>) {
   return (
     <html lang="en">
@@ -26,7 +24,6 @@ export default function RootLayout({
           <SidebarContextProvider>
             <ThemeContextProvider>
             {children}
-            {detail}
             </ThemeContextProvider>
           </SidebarContextProvider>
         </WrapperSession>
