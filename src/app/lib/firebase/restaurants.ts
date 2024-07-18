@@ -11,10 +11,12 @@ import {
   updateDoc,
   orderBy,
   serverTimestamp,
+  GeoPoint,
 } from "firebase/firestore";
 import App from "./config";
 import { getFirestore } from "firebase/firestore";
 import { success, notFound, notImplemented } from "@/app/api/statusCode";
+import { geohashForLocation } from "geofire-common";
 
 const db = getFirestore(App);
 
@@ -64,7 +66,15 @@ export async function GetRestaurantBy(inputUser: any) {
 export async function PostRestaurant(dataInput: any) {
   try {
     dataInput.created_at = serverTimestamp();
-    await setDoc(doc(collection(db, "restaurants")), dataInput);
+    const lat = 51.5074;
+    const lng = 0.1278;
+    const hash = geohashForLocation([lat, lng]);
+    await setDoc(doc(collection(db, "restaurants")), {...dataInput, 
+      geohash: hash,
+      lat: lat,
+      lng: lng
+    
+  });
     return { status: true, statusCode: success };
   } catch {
     return { status: false, statusCode: notImplemented };
@@ -77,7 +87,7 @@ export async function GetAllRestaurant(category: any) {
     if (category) {
       q = query(
         collection(db, "restaurants"),
-        where("category", "==", category),
+        where("category", "==", category)
       );
     } else {
       q = query(collection(db, "restaurants"), orderBy("created_at", "desc"));

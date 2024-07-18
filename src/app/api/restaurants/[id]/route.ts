@@ -8,12 +8,29 @@ import {
   notFound,
   internalServerError,
   notImplemented,
+  unauthorized
 } from "../../statusCode";
+import VerifyToken from "@/app/function/VerifyToken";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const verified = VerifyToken(req.headers.get("authorization"))
+  if (!verified) {
+    return NextResponse.json(
+      {
+        status: false,
+        statusCode: unauthorized,
+        message: "Invalid token JWT",
+        data: null,
+      },
+      {
+        status: unauthorized,
+      }
+    );
+  }
+
   try {
     const { status, statusCode, data } = await GetRestaurantById(params.id);
     if (status) {
