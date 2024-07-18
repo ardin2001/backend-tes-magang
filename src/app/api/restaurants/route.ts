@@ -14,8 +14,8 @@ import {
 import VerifyToken from "@/app/function/VerifyToken";
 
 export async function GET(req: NextRequest) {
-  const verified = VerifyToken(req.headers.get("authorization"))
-  if (!verified) {
+  const {status} = VerifyToken(req.headers.get("authorization"))
+  if (!status) {
     return NextResponse.json(
       {
         status: false,

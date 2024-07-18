@@ -16,8 +16,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const verified = VerifyToken(req.headers.get("authorization"))
-  if (!verified) {
+  const {status} = VerifyToken(req.headers.get("authorization"))
+  if (!status) {
     return NextResponse.json(
       {
         status: false,
